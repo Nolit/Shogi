@@ -17,6 +17,8 @@ class UserTableSeeder extends Seeder
         DatabaseSeeder::truncateTable('statuses');
         DatabaseSeeder::truncateTable('title_user');
         DatabaseSeeder::truncateTable('avatar_user');
+        DatabaseSeeder::truncateTable('friends');
+        DatabaseSeeder::truncateTable('friends_request');
         
         for($i=1;$i<11;$i++){
             $user = new User();
@@ -25,5 +27,13 @@ class UserTableSeeder extends Seeder
             $user->password = "pass" . $i;
             $user->save();
         }
+        
+        for($i=1;$i<4;$i++){
+            $user = User::find($i);
+            $user->requests()->save(User::find($i+1));
+        }
+        $user = User::find(2);
+        $user->accept(1);
+
     }
 }
