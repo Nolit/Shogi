@@ -21,19 +21,35 @@ class User extends Model
     
     public function record()
     {
-        return $this->hasOne('App\Models\Record');
+        return $this->hasOne(Record::class);
     }
     public function status()
     {
-        return $this->hasOne('App\Models\Status');
+        return $this->hasOne(Status::class);
+    }
+    public function avatars()
+    {
+        return $this->belongsToMany(Avatar::class)->withTimestamps();
+    }
+    public function titles()
+    {
+        return $this->belongsToMany(Title::class)->withTimestamps();
     }
     
     public function save(array $options = array()) {
         parent::save($options);
+        
+        //リレーションの処理をこの分岐に書きます
+        //主キーがsaveメソッド時に割り当てられるためコンストラクタには書けない
         if(!isset($this->record->user_id) && !isset($this->status->user_id)){
             $this->record->user_id = $this->id;
             $this->status->user_id = $this->id;
+            for($i=0;$i<3;$i++){
+                $this->avatars()->save(Avatar::find($i+1));
+            }
+            $this->titles()->save(Title::find(1));
         }
+        
         $this->record->save();
         $this->status->save();
     }

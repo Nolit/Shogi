@@ -15,8 +15,10 @@ class UserTableSeeder extends Seeder
         DatabaseSeeder::truncateTable('users');
         DatabaseSeeder::truncateTable('records');
         DatabaseSeeder::truncateTable('statuses');
+        DatabaseSeeder::truncateTable('title_user');
+        DatabaseSeeder::truncateTable('avatar_user');
         
-        for($i=0;$i<10;$i++){
+        for($i=1;$i<11;$i++){
             $user = new User();
             $user->name = 'name' . $i;
             $user->email = "mail" . $i;
